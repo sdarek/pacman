@@ -1,25 +1,50 @@
 import pygame
-from utils.constants import *
+from utils.constants import GRID_SIZE
 
 
-class Pacman:
+class Pacman(pygame.sprite.Sprite):
     def __init__(self, row, col):
-        self.row = row
-        self.col = col
-        self.direction = (0, 0)  # Kierunek ruchu (dx, dy)
+        super().__init__()
+        self.image = pygame.image.load("assets/images_cropped/braun.png")
+        self.image = pygame.transform.scale(self.image, (GRID_SIZE, GRID_SIZE))
+        self.rect = self.image.get_rect()
+        self.rect.x = col * GRID_SIZE
+        self.rect.y = row * GRID_SIZE
+        self.direction = (0, 0)
+        self.next_direction = (0, 0)
+        self.speed = 2
 
-    def move(self, dx, dy, maze):
-        new_row = self.row + dy
-        new_col = self.col + dx
-        if self.is_valid_move(new_row, new_col, maze):
-            self.row = new_row
-            self.col = new_col
+    def update(self, grid, walls, dots):
+        # Sprawdzenie czy moze sie przemiescic w nowym kierunku
+        if self.next_direction != (0, 0):
+            dx = self.next_direction[0] * self.speed
+            dy = self.next_direction[1] * self.speed
+            self.rect.x = self.rect.x + dx
+            self.rect.y = self.rect.y + dy
+            if pygame.sprite.spritecollide(self, walls, dokill=False):
+                self.rect.x = self.rect.x - dx
+                self.rect.y = self.rect.y - dy
+            else:
+                self.direction = self.next_direction
+                self.next_direction = (0, 0)
 
-    def is_valid_move(self, new_row, new_col, maze):
-        return 0 <= new_row < len(maze) and 0 <= new_col < len(maze[0]) and maze[new_row][new_col] != 1
+        # Oblicz nowe współrzędne Pacmana
+        if self.direction != (0, 0):
+            dx = self.direction[0] * self.speed
+            dy = self.direction[1] * self.speed
 
-    def update(self, maze):
-        self.move(self.direction[0], self.direction[1], maze)
+            self.rect.x = self.rect.x + dx
+            self.rect.y = self.rect.y + dy
 
-    def draw(self, screen):
-        pygame.draw.circle(screen, YELLOW, (self.col * GRID_SIZE + GRID_SIZE // 2, self.row * GRID_SIZE + GRID_SIZE // 2), GRID_SIZE // 2)
+            if pygame.sprite.spritecollide(self, walls, dokill=False):
+                self.rect.x = self.rect.x - dx
+                self.rect.y = self.rect.y - dy
+
+        pacman_collisions = pygame.sprite.spritecollide(self, dots, dokill=True)
+
+    def draw(self, surface):
+        # Narysuj obrazek Pacmana na ekranie
+        surface.blit(self.image, self.rect)
+
+    def turn(self, direction):
+        self.next_direction = direction
