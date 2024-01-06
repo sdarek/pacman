@@ -1,18 +1,13 @@
 import pygame
 import random
 from utils.constants import *
+from game.creature import Creature
 
-class Ghost(pygame.sprite.Sprite):
-    def __init__(self, col, row):
-        super().__init__()
+class Ghost(Creature):
+    def __init__(self, col, row, game):
+        super().__init__("assets/images_cropped/ghost.png", col, row, game)
 
-        self.image = pygame.image.load("assets/images_cropped/ghost.png")
-        self.image = pygame.transform.scale(self.image, (GRID_SIZE, GRID_SIZE))
-        self.rect = self.image.get_rect()
-        self.rect.x = col * GRID_SIZE
-        self.rect.y = row * GRID_SIZE
-
-    def update(self, grid):
+    def update(self):
         # Tutaj dodaj logikę aktualizacji położenia Duszka na planszy
         pass
 

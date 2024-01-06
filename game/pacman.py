@@ -1,50 +1,34 @@
 import pygame
 from utils.constants import GRID_SIZE
+from game.creature import Creature
 
 
-class Pacman(pygame.sprite.Sprite):
-    def __init__(self, row, col):
-        super().__init__()
-        self.image = pygame.image.load("assets/images_cropped/braun.png")
-        self.image = pygame.transform.scale(self.image, (GRID_SIZE, GRID_SIZE))
-        self.rect = self.image.get_rect()
-        self.rect.x = col * GRID_SIZE
-        self.rect.y = row * GRID_SIZE
-        self.direction = (0, 0)
-        self.next_direction = (0, 0)
-        self.speed = 2
+class Pacman(Creature):
+    def __init__(self, row, col, game):
+        super().__init__("assets/images_cropped/braun.png", col, row, game)
+        self.start_position_x = col * GRID_SIZE
+        self.start_position_y = row * GRID_SIZE
 
-    def update(self, grid, walls, dots):
-        # Sprawdzenie czy moze sie przemiescic w nowym kierunku
-        if self.next_direction != (0, 0):
-            dx = self.next_direction[0] * self.speed
-            dy = self.next_direction[1] * self.speed
-            self.rect.x = self.rect.x + dx
-            self.rect.y = self.rect.y + dy
-            if pygame.sprite.spritecollide(self, walls, dokill=False):
-                self.rect.x = self.rect.x - dx
-                self.rect.y = self.rect.y - dy
+    def update(self):
+
+        self.move()
+        # zjedzenie gasnicy
+        pacman_collisions = pygame.sprite.spritecollide(self, self.game.dots, dokill=True)
+        if pacman_collisions:
+            self.game.score += 1
+
+        # Sprawdź kolizję Pacbrauna z duszkami
+        pacman_ghost_collisions = pygame.sprite.spritecollide(self.game.pacman, self.game.ghosts, dokill=False)
+        if pacman_ghost_collisions:
+            self.game.lives -= 1
+            self.direction = (0, 0)
+            if self.game.lives <= 0:
+                print("Game Over")
+                pygame.quit()
+                exit()
             else:
-                self.direction = self.next_direction
-                self.next_direction = (0, 0)
+                self.game.pacman.reset_position()
 
-        # Oblicz nowe współrzędne Pacmana
-        if self.direction != (0, 0):
-            dx = self.direction[0] * self.speed
-            dy = self.direction[1] * self.speed
-
-            self.rect.x = self.rect.x + dx
-            self.rect.y = self.rect.y + dy
-
-            if pygame.sprite.spritecollide(self, walls, dokill=False):
-                self.rect.x = self.rect.x - dx
-                self.rect.y = self.rect.y - dy
-
-        pacman_collisions = pygame.sprite.spritecollide(self, dots, dokill=True)
-
-    def draw(self, surface):
-        # Narysuj obrazek Pacmana na ekranie
-        surface.blit(self.image, self.rect)
-
-    def turn(self, direction):
-        self.next_direction = direction
+    def reset_position(self):
+        self.rect.x = self.start_position_x
+        self.rect.y = self.start_position_y
