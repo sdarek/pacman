@@ -34,6 +34,9 @@ class Game(metaclass=SingletonMeta):
         self.pacman_icon = pygame.image.load("assets/images_cropped/braun.png")
         self.pacman_icon = pygame.transform.scale(self.pacman_icon, (GRID_SIZE, GRID_SIZE))
 
+        self.start_time = pygame.time.get_ticks()
+
+
         # Inicjalizacja obiektów Pacmana, Duszków i Kropki
         for row_idx, row in enumerate(maze):
             for col_idx, cell_value in enumerate(row):
@@ -45,6 +48,8 @@ class Game(metaclass=SingletonMeta):
                     self.dots.add(Dot(col_idx, row_idx))
                 elif cell_value == 1:
                     self.walls.add(Wall(row_idx, col_idx))
+                elif cell_value == 5:
+                    self.dots.add(Dot(col_idx, row_idx, True))
 
     def run(self):
         while True:
@@ -52,7 +57,7 @@ class Game(metaclass=SingletonMeta):
             self.update()
             self.draw()
             pygame.display.flip()
-            self.clock.tick(200)
+            self.clock.tick(100)
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -74,7 +79,7 @@ class Game(metaclass=SingletonMeta):
         self.ghosts.update()
 
     def draw(self):
-        self.screen.fill(BLACK)
+        self.screen.fill(BLUE)
         self.walls.draw(self.screen)
         self.dots.draw(self.screen)
         self.ghosts.draw(self.screen)
@@ -88,6 +93,15 @@ class Game(metaclass=SingletonMeta):
         for i in range(self.lives):
             life_rect = self.pacman_icon.get_rect(topleft=(GAME_SIZE[0] - 150 + i * 40, 100))
             self.screen.blit(self.pacman_icon, life_rect)
+
+        self.draw_timer()
+
+    def draw_timer(self):
+        current_time = pygame.time.get_ticks()
+        elapsed_seconds = (current_time - self.start_time) / 1000.
+        time_text = self.font.render(f"Time: {elapsed_seconds:.1f}s", True, WHITE)
+        time_rect = time_text.get_rect(topleft=(GAME_SIZE[0] - 160, 170))
+        self.screen.blit(time_text, time_rect)
 
 
 

@@ -6,31 +6,39 @@ from game.creature import Creature
 class Pacman(Creature):
     def __init__(self, row, col, game):
         super().__init__("assets/images_cropped/braun.png", col, row, game)
-        self.start_position_x = col * GRID_SIZE
-        self.start_position_y = row * GRID_SIZE
-        self.speed = 1
+        self.speed = 2
 
     def update(self):
         self.collision = self.wall_collision(self.direction)
         self.next_collision = self.wall_collision(self.next_direction)
         self.move()
         #print(f"{self.direction} {self.next_direction}")
+
         # zjedzenie gasnicy
-        pacman_collisions = pygame.sprite.spritecollide(self, self.game.dots, dokill=True)
-        if pacman_collisions:
-            self.game.score += 1
+        pacbraun_dot_collision = pygame.sprite.spritecollide(self, self.game.dots, dokill=True)
+        if pacbraun_dot_collision:
+            if pacbraun_dot_collision[0].getBig():
+                self.game.score += 20
+                for ghost in self.game.ghosts:
+                    ghost.switch_to_flee()
+            else:
+                self.game.score += 1
 
         # Sprawdź kolizję Pacbrauna z duszkami
         pacman_ghost_collisions = pygame.sprite.spritecollide(self.game.pacman, self.game.ghosts, dokill=False)
         if pacman_ghost_collisions:
-            self.game.lives -= 1
-            self.direction = (0, 0)
-            if self.game.lives <= 0:
-                print("Game Over")
-                pygame.quit()
-                exit()
+            if pacman_ghost_collisions[0].getCanBeEaten():
+                self.game.score += 10
+                pacman_ghost_collisions[0].reset_position()
             else:
-                self.game.pacman.reset_position()
+                self.game.lives -= 1
+                self.direction = (0, 0)
+                if self.game.lives <= 0:
+                    print("Game Over")
+                    pygame.quit()
+                    exit()
+                else:
+                    self.reset_position()
 
     def reset_position(self):
         self.rect.x = self.start_position_x

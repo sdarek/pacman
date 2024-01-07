@@ -14,7 +14,6 @@ class MapEditor:
         self.grid = [[0 for _ in range(COLS)] for _ in range(ROWS)]
         self.mouse_down = False
         self.draw_mode = 1  # 1 - rysowanie ścian, 2 - kasowanie ścian, 3 - rysowanie kropek, 4 - rysowanie duszkow, 5 - brauna, 6 - rysowanie duzych gasnic
-        self.draw_ghost_mode = None  # None - brak rysowania duszków/Pacmana, 4 - rysowanie duszków, 5 - rysowanie Pacmana
 
     def run(self):
         while True:
@@ -44,19 +43,16 @@ class MapEditor:
                     self.clear_maze()
                 elif event.key == pygame.K_1:
                     self.draw_mode = 1  # Rysowanie ścian
-                    self.draw_ghost_mode = None  # Wyłączenie rysowania duszków/Pacmana
                 elif event.key == pygame.K_2:
                     self.draw_mode = 2  # Kasowanie ścian
-                    self.draw_ghost_mode = None  # Wyłączenie rysowania duszków/Pacmana
                 elif event.key == pygame.K_3:
                     self.draw_mode = 3  # Rysowanie kropek
-                    self.draw_ghost_mode = None  # Wyłączenie rysowania duszków/Pacmana
                 elif event.key == pygame.K_4:
-                    self.draw_mode = None  # Wyłączenie rysowania ścian/kropek
-                    self.draw_ghost_mode = 4  # Rysowanie duszków
+                    self.draw_mode = 4  # Rysowanie duszkow
                 elif event.key == pygame.K_5:
-                    self.draw_mode = None  # Wyłączenie rysowania ścian/kropek
-                    self.draw_ghost_mode = 5  # Rysowanie Pacmana
+                    self.draw_mode = 5  # Rysowanie brauna
+                elif event.key == pygame.K_6:
+                    self.draw_mode = 6  # Rysowanie duzych gasnic
 
     def handle_mouse_click(self, pos):
         col = pos[0] // GRID_SIZE
@@ -69,10 +65,12 @@ class MapEditor:
                 self.grid[row][col] = 0  # Kasowanie ścian
             elif self.draw_mode == 3:
                 self.grid[row][col] = 2  # Rysowanie kropek
-            elif self.draw_ghost_mode == 4:
+            elif self.draw_mode == 4:
                 self.grid[row][col] = 3  # Rysowanie duszków
-            elif self.draw_ghost_mode == 5:
+            elif self.draw_mode == 5:
                 self.grid[row][col] = 4  # Rysowanie Pacmana
+            elif self.draw_mode == 6:
+                self.grid[row][col] = 5  # Rysowanie Pacmana
 
     def draw(self):
         self.screen.fill(BLACK)  # Czarny tło
@@ -93,6 +91,10 @@ class MapEditor:
                     pacman_image = pygame.image.load("assets/images_cropped/braun.png")
                     pacman_image = pygame.transform.scale(pacman_image, (GRID_SIZE, GRID_SIZE))
                     self.screen.blit(pacman_image, (col * GRID_SIZE, row * GRID_SIZE))
+                elif self.grid[row][col] == 5:
+                    big_dot_image = pygame.image.load("assets/images_cropped/dot.png")
+                    big_dot_image = pygame.transform.scale(big_dot_image, (GRID_SIZE, GRID_SIZE))
+                    self.screen.blit(big_dot_image, (col * GRID_SIZE, row * GRID_SIZE))
                 else:
                     pygame.draw.rect(self.screen, BLACK, (col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE, GRID_SIZE), 1)
 

@@ -5,11 +5,13 @@ from utils.constants import GRID_SIZE
 class Creature(pygame.sprite.Sprite):
     def __init__(self, image_path, x, y, game):
         super().__init__()
-        self.image = pygame.image.load(image_path)
-        self.image = pygame.transform.scale(self.image, (GRID_SIZE, GRID_SIZE))
-        self.rect = self.image.get_rect()
-        self.rect.x = x * GRID_SIZE
-        self.rect.y = y * GRID_SIZE
+
+        original_image = pygame.image.load(image_path).convert_alpha()
+        self.image = pygame.transform.scale(original_image, (GRID_SIZE, GRID_SIZE))
+        self.rect = self.image.get_rect(topleft=(x * GRID_SIZE, y * GRID_SIZE))
+
+        self.start_position_x = x * GRID_SIZE
+        self.start_position_y = y * GRID_SIZE
         self.direction = (0, 0)
         self.next_direction = (0, 0)
         self.game = game
