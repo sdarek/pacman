@@ -13,7 +13,7 @@ class MapEditor:
 
         self.grid = [[0 for _ in range(COLS)] for _ in range(ROWS)]
         self.mouse_down = False
-        self.draw_mode = 1  # 1 - rysowanie ścian, 2 - kasowanie ścian, 3 - rysowanie kropek
+        self.draw_mode = 1  # 1 - rysowanie ścian, 2 - kasowanie ścian, 3 - rysowanie kropek, 4 - rysowanie duszkow, 5 - brauna, 6 - rysowanie duzych gasnic
         self.draw_ghost_mode = None  # None - brak rysowania duszków/Pacmana, 4 - rysowanie duszków, 5 - rysowanie Pacmana
 
     def run(self):

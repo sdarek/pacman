@@ -52,7 +52,7 @@ class Game(metaclass=SingletonMeta):
             self.update()
             self.draw()
             pygame.display.flip()
-            self.clock.tick(150)
+            self.clock.tick(200)
 
     def handle_events(self):
         for event in pygame.event.get():
