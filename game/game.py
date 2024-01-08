@@ -6,6 +6,7 @@ from game.pacman import Pacman
 from game.ghost import Ghost
 from game.dot import Dot
 from game.wall import Wall
+from game.gate import Gate
 
 
 class SingletonMeta(type):
@@ -27,6 +28,7 @@ class Game(metaclass=SingletonMeta):
         self.walls = pygame.sprite.Group()
         self.ghosts = pygame.sprite.Group()
         self.dots = pygame.sprite.Group()
+        self.gates = pygame.sprite.Group()
 
         self.score = 0
         self.lives = 3
@@ -50,6 +52,8 @@ class Game(metaclass=SingletonMeta):
                     self.walls.add(Wall(row_idx, col_idx))
                 elif cell_value == 5:
                     self.dots.add(Dot(col_idx, row_idx, True))
+                elif cell_value == 6:
+                    self.gates.add(Gate(row_idx, col_idx, self))
 
     def run(self):
         while True:
@@ -84,6 +88,9 @@ class Game(metaclass=SingletonMeta):
         self.dots.draw(self.screen)
         self.ghosts.draw(self.screen)
         self.pacman.draw(self.screen)
+        for gate in self.gates:
+            gate.draw()
+
         # Rysuj licznik punktów po prawej stronie
         score_text = self.font.render(f"Score: {self.score}", True, WHITE)
         score_rect = score_text.get_rect(center=(GAME_SIZE[0] - 100, 50))

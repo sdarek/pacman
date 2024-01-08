@@ -12,6 +12,8 @@ DARKBLUE = (0, 17, 51)
 YELLOW = (255, 255, 0)
 PINK = (255, 182, 193)
 
+WALL_COLOR  = (255, 255, 255)
+
 #PRAWO (1, 0)
 #LEWO (-1, 0)
 #GORA (0, -1)

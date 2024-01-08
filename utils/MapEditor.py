@@ -15,6 +15,7 @@ class MapEditor:
         self.mouse_down = False
         self.draw_mode = 1  # 1 - rysowanie ścian, 2 - kasowanie ścian, 3 - rysowanie kropek, 4 - rysowanie duszkow, 5 - brauna, 6 - rysowanie duzych gasnic
 
+
     def run(self):
         while True:
             self.handle_events()
@@ -43,16 +44,25 @@ class MapEditor:
                     self.clear_maze()
                 elif event.key == pygame.K_1:
                     self.draw_mode = 1  # Rysowanie ścian
+                    print("Wybrano: ŚCIANY")
                 elif event.key == pygame.K_2:
                     self.draw_mode = 2  # Kasowanie ścian
+                    print("Wybrano: PUSTE")
                 elif event.key == pygame.K_3:
                     self.draw_mode = 3  # Rysowanie kropek
+                    print("Wybrano: GAŚNICE")
                 elif event.key == pygame.K_4:
                     self.draw_mode = 4  # Rysowanie duszkow
+                    print("Wybrano: POSŁOWIE")
                 elif event.key == pygame.K_5:
                     self.draw_mode = 5  # Rysowanie brauna
+                    print("Wybrano: BRAUN")
                 elif event.key == pygame.K_6:
                     self.draw_mode = 6  # Rysowanie duzych gasnic
+                    print("Wybrano: DUŻE GAŚNICE")
+                elif event.key == pygame.K_7:
+                    self.draw_mode = 7  # Rysowanie duzych gasnic
+                    print("Wybrano: BRAMA")
 
     def handle_mouse_click(self, pos):
         col = pos[0] // GRID_SIZE
@@ -70,7 +80,9 @@ class MapEditor:
             elif self.draw_mode == 5:
                 self.grid[row][col] = 4  # Rysowanie Pacmana
             elif self.draw_mode == 6:
-                self.grid[row][col] = 5  # Rysowanie Pacmana
+                self.grid[row][col] = 5  # Rysowanie duzych gasnic
+            elif self.draw_mode == 7:
+                self.grid[row][col] = 6  # Rysowanie bramy
 
     def draw(self):
         self.screen.fill(BLACK)  # Czarny tło
@@ -95,6 +107,12 @@ class MapEditor:
                     big_dot_image = pygame.image.load("assets/images_cropped/dot.png")
                     big_dot_image = pygame.transform.scale(big_dot_image, (GRID_SIZE, GRID_SIZE))
                     self.screen.blit(big_dot_image, (col * GRID_SIZE, row * GRID_SIZE))
+                elif self.grid[row][col] == 6:
+                    line_start = (col * GRID_SIZE, row * GRID_SIZE + GRID_SIZE // 2)
+                    line_end = ((col + 1) * GRID_SIZE, row * GRID_SIZE + GRID_SIZE // 2)
+                    line_color = (255, 255, 255)
+                    line_thickness = 2
+                    pygame.draw.line(self.screen, line_color, line_start, line_end, line_thickness)
                 else:
                     pygame.draw.rect(self.screen, BLACK, (col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE, GRID_SIZE), 1)
 

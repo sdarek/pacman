@@ -60,11 +60,27 @@ class Ghost(Creature):
         self.speed = RANDOM_SPEED
         self.can_be_eaten = False
         self.flee_start_time = 0
+        self.in_home = True
 
     def update(self):
         self.target = self.game.pacman.getPosition()
         self.collision = self.wall_collision(self.direction)
         self.state.update(self, self.game)
+        print(self.in_home)
+        if self.in_home:
+            for gate in self.game.gates:
+                if gate.check_collision(self.rect):
+                    if not gate.check_collision(pygame.Rect(self.rect.x + self.direction[0], self.rect.y + self.direction[1], self.rect.width, self.rect.height)):
+                        self.in_home = False
+                        break
+        elif not self.in_home:
+            for gate in self.game.gates:
+                if gate.check_collision(self.rect):
+                    self.rect.x -= self.direction[0] * self.speed
+                    self.rect.y -= self.direction[1] * self.speed
+                    self.direction = (-self.direction[0], -self.direction[1])
+                    break
+
 
     def switch_to_chase(self):
         self.can_be_eaten = False
@@ -105,4 +121,5 @@ class Ghost(Creature):
     def reset_position(self):
         self.rect.x = self.start_position_x
         self.rect.y = self.start_position_y
+        self.in_home = True;
 

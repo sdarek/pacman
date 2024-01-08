@@ -25,7 +25,7 @@ class Pacman(Creature):
                 self.game.score += 1
 
         # Sprawdź kolizję Pacbrauna z duszkami
-        pacman_ghost_collisions = pygame.sprite.spritecollide(self.game.pacman, self.game.ghosts, dokill=False)
+        pacman_ghost_collisions = pygame.sprite.spritecollide(self, self.game.ghosts, dokill=False)
         if pacman_ghost_collisions:
             if pacman_ghost_collisions[0].getCanBeEaten():
                 self.game.score += 10
@@ -39,6 +39,12 @@ class Pacman(Creature):
                     exit()
                 else:
                     self.reset_position()
+        for gate in self.game.gates:
+            if gate.check_collision(self.rect):
+                self.rect.x -= self.direction[0] * self.speed
+                self.rect.y -= self.direction[1] * self.speed
+
+
 
     def reset_position(self):
         self.rect.x = self.start_position_x
