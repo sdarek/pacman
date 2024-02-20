@@ -36,8 +36,8 @@ def resize_to_square(input_path, output_path, new_size):
     resized_image.save(output_path)
 
 if __name__ == "__main__":
-    input_folder = "C:/Users/Darek/Desktop/Studia/TO/PacBraun/assets/images"
-    output_folder = "C:/Users/Darek/Desktop/Studia/TO/PacBraun/assets/images_cropped"
+    input_folder = "D:\\Cos\\Studia\\TO\\PacBraun\\assets\\images"
+    output_folder = "D:\\Cos\\Studia\\TO\\PacBraun\\assets\\images_cropped"
     new_size = GRID_SIZE
 
     resize_images_in_folder(input_folder, output_folder, new_size)

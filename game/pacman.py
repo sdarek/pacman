@@ -1,3 +1,4 @@
+#pacman.py
 import pygame
 from utils.constants import GRID_SIZE
 from game.creature import Creature
@@ -5,7 +6,7 @@ from game.creature import Creature
 
 class Pacman(Creature):
     def __init__(self, row, col, game):
-        super().__init__("assets/images_cropped/braun.png", col, row, game)
+        super().__init__("assets/images_cropped/pac.png", col, row, game)
         self.speed = 2
 
     def update(self):
@@ -32,13 +33,7 @@ class Pacman(Creature):
                 pacman_ghost_collisions[0].reset_position()
             else:
                 self.game.lives -= 1
-                self.direction = (0, 0)
-                if self.game.lives <= 0:
-                    print("Game Over")
-                    pygame.quit()
-                    exit()
-                else:
-                    self.reset_position()
+                self.reset_position()
         for gate in self.game.gates:
             if gate.check_collision(self.rect):
                 self.rect.x -= self.direction[0] * self.speed
@@ -47,6 +42,7 @@ class Pacman(Creature):
 
 
     def reset_position(self):
+        self.direction = (0, 0)
         self.rect.x = self.start_position_x
         self.rect.y = self.start_position_y
 

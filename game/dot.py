@@ -6,7 +6,7 @@ class Dot(pygame.sprite.Sprite):
     def __init__(self, col, row, big=False):
         super().__init__()
 
-        original_image = pygame.image.load("assets/images_cropped/dot.png").convert_alpha()
+        original_image = pygame.image.load("assets/images_cropped/pacdot.png").convert_alpha()
 
         if big:
             self.image = pygame.transform.scale(original_image, (GRID_SIZE, GRID_SIZE))

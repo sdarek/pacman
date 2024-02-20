@@ -1,3 +1,4 @@
+#ghost.py
 import pygame
 import random
 from utils.constants import *
@@ -23,7 +24,6 @@ class FleeState:
         new_direction = random.choice(available_directions)
         ghost.next_direction = new_direction
         ghost.move()
-        pass
 
 
 class RandomState:
@@ -35,12 +35,9 @@ class RandomState:
 
 
 class Ghost(Creature):
-    image_paths = ["assets/images_cropped/tusk.png",
-                   "assets/images_cropped/morawiecki.png",
-                   "assets/images_cropped/kaczka.png",
-                   "assets/images_cropped/gudzinska.png",
-                   "assets/images_cropped/macierewicz.png",
-                   "assets/images_cropped/holownia.png"]
+    image_paths = ["assets/images_cropped/pacblue.png",
+                   "assets/images_cropped/pacorange.png",
+                   "assets/images_cropped/pacred.png"]
     used_paths = set()
     def __init__(self, col, row, game):
         unused_paths = list(set(Ghost.image_paths) - set(Ghost.used_paths))
@@ -66,7 +63,6 @@ class Ghost(Creature):
         self.target = self.game.pacman.getPosition()
         self.collision = self.wall_collision(self.direction)
         self.state.update(self, self.game)
-        print(self.in_home)
         if self.in_home:
             for gate in self.game.gates:
                 if gate.check_collision(self.rect):
@@ -122,4 +118,5 @@ class Ghost(Creature):
         self.rect.x = self.start_position_x
         self.rect.y = self.start_position_y
         self.in_home = True;
+        self.direction = random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
 

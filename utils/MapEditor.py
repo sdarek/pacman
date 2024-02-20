@@ -92,19 +92,19 @@ class MapEditor:
                 if self.grid[row][col] == 1:
                     pygame.draw.rect(self.screen, WHITE, (col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE, GRID_SIZE))
                 elif self.grid[row][col] == 2:
-                    dot_image = pygame.image.load("assets/images_cropped/dot.png")
+                    dot_image = pygame.image.load("assets/images_cropped/pacdot.png")
                     dot_image = pygame.transform.scale(dot_image, (GRID_SIZE // 2, GRID_SIZE // 2))
                     self.screen.blit(dot_image, (col * GRID_SIZE + GRID_SIZE // 4, row * GRID_SIZE + GRID_SIZE // 4))
                 elif self.grid[row][col] == 3:
-                    ghost_image = pygame.image.load("assets/images_cropped/ghost.png")
+                    ghost_image = pygame.image.load("assets/images_cropped/pacred.png")
                     ghost_image = pygame.transform.scale(ghost_image, (GRID_SIZE, GRID_SIZE))
                     self.screen.blit(ghost_image, (col * GRID_SIZE, row * GRID_SIZE))
                 elif self.grid[row][col] == 4:
-                    pacman_image = pygame.image.load("assets/images_cropped/braun.png")
+                    pacman_image = pygame.image.load("assets/images_cropped/pac.png")
                     pacman_image = pygame.transform.scale(pacman_image, (GRID_SIZE, GRID_SIZE))
                     self.screen.blit(pacman_image, (col * GRID_SIZE, row * GRID_SIZE))
                 elif self.grid[row][col] == 5:
-                    big_dot_image = pygame.image.load("assets/images_cropped/dot.png")
+                    big_dot_image = pygame.image.load("assets/images_cropped/pacdot.png")
                     big_dot_image = pygame.transform.scale(big_dot_image, (GRID_SIZE, GRID_SIZE))
                     self.screen.blit(big_dot_image, (col * GRID_SIZE, row * GRID_SIZE))
                 elif self.grid[row][col] == 6:
